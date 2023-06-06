@@ -1,0 +1,69 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data">
+    <label>First Name</label>
+    <input name="firstname">
+    <br>
+    <label>Last Name</label>
+    <input name="lastname">
+    <br>
+    <label>Email</label>
+    <input userID="email" name="email" type="email">
+    <p userID="message"></p>
+    <label>Password</label>
+    <input userID="password" name="password" type="password">
+    <button userID="show-password" type="button">Show</button>
+    <br>
+    <label>Date of Birth</label>
+    <input name="birthday" type="date">
+    <br>
+    <label>Profile Picture</label>
+    <input type="file" name="image">
+    <br>
+    <button type="submit">Sign Up</button>
+</form>
+
+<script>
+let input = document.querySelector('#email');
+let message = document.querySelector('#message');
+
+input.addEventListener('input', checkUniqueEmail);
+
+async function checkUniqueEmail() {
+    let response = await fetch('checkemail?email=' + input.value);
+    let json = await response.json();
+    if (json.exists) {
+        message.style.color = 'red';
+        message.textContent = 'That email already exists.';
+    } else if (input.validationMessage) {
+        message.style.color = 'orange';
+        message.textContent = input.validationMessage;
+    } else if (input.value) {
+        message.style.color = 'green';
+        message.textContent = 'That email is available!';
+    } else {
+        message.textContent = '';
+    }
+}
+</script>
+
+<script>
+let password = document.querySelector('#password');
+let showButton = document.querySelector('#show-password');
+
+showButton.addEventListener('click', togglePassword);
+
+function togglePassword() {
+    if (password.type == 'password') {
+        password.type = 'text';
+        showButton.textContent = 'Hide';
+    } else {
+        password.type = 'password';
+        showButton.textContent = 'Show';
+    }
+}
+</script>
+
+{% endblock %}

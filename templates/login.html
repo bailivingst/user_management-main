@@ -1,0 +1,33 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+
+<form method="POST">
+    <label>Email</label>
+    <input name="email" type="email">
+    <br>
+    <label>Password</label>
+    <input userID="password" name="password" type="password">
+    <button userID="show-password" type="button">Show</button>
+    <br>
+    <button>Login</button>
+</form>
+
+<script>
+let password = document.querySelector('#password');
+let showButton = document.querySelector('#show-password');
+
+showButton.addEventListener('click', togglePassword);
+
+function togglePassword() {
+    if (password.type == 'password') {
+        password.type = 'text';
+        showButton.textContent = 'Hide';
+    } else {
+        password.type = 'password';
+        showButton.textContent = 'Show';
+    }
+}
+</script>
+
+{% endblock %}

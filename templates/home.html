@@ -1,0 +1,44 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+<h1>Hello World!</h1>
+
+<table>
+    <colgroup><col><col><col></colgroup>
+    <tr>
+        <th>Role</th>
+        <th>Picture</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+{% for row in result %}
+    <tr>
+        <td>
+            {% if row['role'] == 'admin' %}
+                Admin
+                {% if session['role'] == 'admin' and session['id'] != row['id'] %}
+                    <a href="/admin?userID={{ row['userID'] }}&role=user">toggle</a>
+                {% endif %}
+            {% else %}
+                User
+                {% if session['role'] == 'admin' %}
+                    <a href="/admin?userID={{ row['userID'] }}&role=admin">toggle</a>
+                {% endif %}
+            {% endif %}
+        </td>
+        <td><img src="{{ row['image'] or 'static/images/default.png' }}" alt="profile" height="32"></td>
+        <td>{{ row["firstname"] }}</td>
+        <td>{{ row["lastname"] }}</td>
+        <td> <a href="mailto:{{ row['email'] }}">{{ row['email'] }}</a> </td>
+        <td>
+            <a href="/view?userID={{ row['userID'] }}">View</a>
+            <a href="/update?userID={{ row['userID'] }}">Edit</a>
+            <a href="/delete?userID={{ row['userID'] }}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}
